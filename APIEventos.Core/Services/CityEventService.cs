@@ -6,17 +6,26 @@ namespace APIEventos.Core.Services
     public class CityEventService : ICityEventService
     {
         public ICityEventRepository _cityEventRepository;
-        public CityEventService(ICityEventRepository cityEventRepository)
+        public IEventReservationService _eventReservationService;
+        public CityEventService(ICityEventRepository cityEventRepository, IEventReservationService eventReservationService)
         {
             _cityEventRepository = cityEventRepository;
+            _eventReservationService = eventReservationService;
         }
 
         public async Task<bool> DeleteAsync(long idEvent)
         {
-            return await _cityEventRepository.DeleteAsync(idEvent);
+            if (((List<EventReservation>)_eventReservationService.GetByEventIdAsync(idEvent).Result).Count() > 0)
+            {
+                CityEvent tempEvent = await _cityEventRepository.GetByIdAsync(idEvent);
+                tempEvent.Status = false;
+                return await _cityEventRepository.UpdateAsync(idEvent, tempEvent);
+            }
+            else
+                return await _cityEventRepository.DeleteAsync(idEvent);
         }
 
-        public async Task<CityEvent> GetById(long idEvent)
+        public async Task<CityEvent> GetByIdAsync(long idEvent)
         {
             return await _cityEventRepository.GetByIdAsync(idEvent);
         }

@@ -15,6 +15,6 @@ namespace APIEventos.Core.Interfaces
         Task<IEnumerable<CityEvent>> GetByTitleAsync(string title);
         Task<IEnumerable<CityEvent>> GetByLocalDateAsync(string local, DateTime dateHourEvent);
         Task<IEnumerable<CityEvent>> GetByPriceDateAsync(decimal minRange, decimal maxRange, DateTime dateHourEvent);
-        Task<CityEvent> GetById(long idEvent);
+        Task<CityEvent> GetByIdAsync(long idEvent);
     }
 }

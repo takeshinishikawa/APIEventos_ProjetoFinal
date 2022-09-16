@@ -36,7 +36,27 @@ namespace APIEventos.Infra.Data.Repository
                 return false;
             }
         }
+        public async Task<IEnumerable<EventReservation>> GetByEventIdAsync(long idEvent)
+        {
+            var query = "SELECT * FROM EventReservation " +
+                "WHERE idEvent = @idEvent ";
 
+            var parameters = new DynamicParameters();
+            parameters.Add("idEvent", idEvent);
+            try
+            {
+                using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+                return await conn.QueryAsync<EventReservation>(query, parameters);
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine($"Error while communicating to DB,\n" +
+                    $"Type: {ex.GetType()},\n" +
+                    $"Message: {ex.Message},\n" +
+                    $"Stack trace: {ex.StackTrace}");
+                return new List<EventReservation>();
+            }
+        }
         public async Task<EventReservation> GetByIdAsync(long idReservation)
         {
             var query = "SELECT * FROM EventReservation " +

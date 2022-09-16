@@ -1,19 +1,22 @@
 ﻿using APIEventos.Core.Interfaces;
 using APIEventos.Core.Models;
+using APIEventos.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIEventos.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    
+
     public class CityEventController : ControllerBase
     {
         public ICityEventService _cityEventService;
+        public IEventReservationService _eventReservationService;
 
-        public CityEventController(ICityEventService cityEventService)
+        public CityEventController(ICityEventService cityEventService, IEventReservationService eventReservationService)
         {
             _cityEventService = cityEventService;
+            _eventReservationService = eventReservationService;
         }
 
         [HttpGet("/search/CityEvent/title")]
@@ -82,12 +85,12 @@ namespace APIEventos.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ServiceFilter(typeof(CheckReservationExistanceActionFilter))]
         //criar filtro para verificar se existe reserva neste evento
         public async Task<IActionResult> DeleteAsync(long idEvent)
         {
-            CityEvent cityEvent = await _cityEventService.GetById(idEvent);
             if (await _cityEventService.DeleteAsync(idEvent))
-                return Ok(cityEvent);
+                return Ok();
             return NotFound();
         }
     }

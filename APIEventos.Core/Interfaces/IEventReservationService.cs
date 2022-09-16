@@ -14,5 +14,6 @@ namespace APIEventos.Core.Interfaces
         Task<bool> DeleteAsync(long idReservation);
         Task<EventReservation> GetByPersonEventAsync(string personName, string title);
         Task<EventReservation> GetByIdAsync(long idReservation);
+        Task<IEnumerable<EventReservation>> GetByEventIdAsync(long idEvent);
     }
 }

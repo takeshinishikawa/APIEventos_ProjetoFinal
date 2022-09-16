@@ -20,6 +20,10 @@ namespace APIEventos.Core.Services
             return await _eventReservationRepository.DeleteAsync(idReservation);
         }
 
+        public async Task<IEnumerable<EventReservation>> GetByEventIdAsync(long idEvent)
+        {
+            return await _eventReservationRepository.GetByEventIdAsync(idEvent);
+        }
         public async Task<EventReservation> GetByIdAsync(long idReservation)
         {
             return await _eventReservationRepository.GetByIdAsync(idReservation);

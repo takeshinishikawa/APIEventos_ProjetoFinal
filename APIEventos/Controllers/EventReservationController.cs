@@ -1,14 +1,14 @@
 ﻿using APIEventos.Core.Interfaces;
 using APIEventos.Core.Models;
 using APIEventos.Core.Services;
+using APIEventos.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIEventos.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Consumes("application/json")]
-    [Produces("application/json")]
+    
     public class EventReservationController : ControllerBase
     {
         public IEventReservationService _eventReservationService;
@@ -18,6 +18,8 @@ namespace APIEventos.Controllers
         }
 
         [HttpGet("/search/reservation/personName&eventTitle")]
+        [Consumes("text/plain")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<EventReservation>> GetByPersonNameAsync(string personName, string title)
@@ -30,9 +32,11 @@ namespace APIEventos.Controllers
         }
 
         [HttpPost("/insert/reservation")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //filtro para verificar se existe evento com o Id informado
+        [ServiceFilter(typeof(CityEventExistsActionFilter))]
         public async Task<ActionResult<EventReservation>> InsertAsyncc(EventReservation reservationObj)
         {
             if (await _eventReservationService.InsertAsync(reservationObj))
@@ -42,18 +46,24 @@ namespace APIEventos.Controllers
         }
 
         [HttpPut("/update/reservation")]
+        [Consumes("text/plain")]
+        [Produces("text/plain")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //inserir filtro para validação do quantity, que deve ser maior que 0
+        [ServiceFilter(typeof(CheckReservationQuantityActionFilter))]
         public async Task<IActionResult> UpdateAsync(long idReservation, long quantity)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
             if (await _eventReservationService.UpdateAsync(idReservation, quantity))
                 return NoContent();
             return NotFound();
         }
 
         [HttpDelete("/delete/reservation")]
+        [Consumes("text/plain")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteAsync(long idReservation)
