@@ -1,12 +1,14 @@
 ﻿using APIEventos.Core.Interfaces;
 using APIEventos.Core.Models;
 using APIEventos.Filters;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIEventos.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [EnableCors("PolicyCors")]
 
     public class CityEventController : ControllerBase
     {

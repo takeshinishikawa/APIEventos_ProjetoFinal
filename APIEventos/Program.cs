@@ -7,6 +7,16 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PolicyCors", policy =>
+    {
+        policy.WithOrigins("https://localhost:7216");//incluir novas origens caso crie um front
+        policy.WithMethods("GET", "POST", "PUT", "DELETE");//incluir novos métodos caso necessário
+        policy.AllowAnyHeader();//definir os Headers também caso necessário
+    });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -30,8 +40,6 @@ builder.Services.AddScoped<CheckEmptyLocalActionFilter>();
 builder.Services.AddScoped<CheckEmptyTitleActionFilter>();
 
 
-
-//builder.Services.AddScoped<CheckReservationExistanceActionFilter>();
 
 //tentativa
 builder.Services.Configure<KestrelServerOptions>(options =>
@@ -61,6 +69,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("PolicyCors");
 
 app.MapControllers();
 

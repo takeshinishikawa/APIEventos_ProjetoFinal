@@ -2,13 +2,15 @@
 using APIEventos.Core.Models;
 using APIEventos.Core.Services;
 using APIEventos.Filters;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIEventos.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    
+    [EnableCors("PolicyCors")]
+
     public class EventReservationController : ControllerBase
     {
         public IEventReservationService _eventReservationService;
