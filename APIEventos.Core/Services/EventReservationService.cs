@@ -15,29 +15,29 @@ namespace APIEventos.Core.Services
         {
             _eventReservationRepository = eventReservationRepository;
         }
-        public bool Delete(long idReservation)
+        public async Task<bool> DeleteAsync(long idReservation)
         {
-            return _eventReservationRepository.Delete(idReservation);
+            return await _eventReservationRepository.DeleteAsync(idReservation);
         }
 
-        public EventReservation GetById(long idReservation)
+        public async Task<EventReservation> GetByIdAsync(long idReservation)
         {
-            return _eventReservationRepository.GetById(idReservation);
+            return await _eventReservationRepository.GetByIdAsync(idReservation);
         }
 
-        public EventReservation GetByPersonEvent(string personName, string title)
+        public async Task<EventReservation> GetByPersonEventAsync(string personName, string title)
         {
-            return _eventReservationRepository.GetByPersonEvent(personName, title);
+            return await _eventReservationRepository.GetByPersonEventAsync(personName, title);
         }
 
-        public bool Insert(EventReservation reservationObj)
+        public async Task<bool> InsertAsync(EventReservation reservationObj)
         {
-            return _eventReservationRepository.Insert(reservationObj);
+            return await _eventReservationRepository.InsertAsync(reservationObj);
         }
 
-        public bool Update(long idReservation, long quantity)
+        public async Task<bool> UpdateAsync(long idReservation, long quantity)
         {
-            return _eventReservationRepository.Update(idReservation, quantity);
+            return await _eventReservationRepository.UpdateAsync(idReservation, quantity);
         }
     }
 }

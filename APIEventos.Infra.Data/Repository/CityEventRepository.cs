@@ -15,7 +15,7 @@ namespace APIEventos.Infra.Data.Repository
             _configuration = configuration;
         }
 
-        public bool Delete(long idEvent)
+        public async Task<bool> DeleteAsync(long idEvent)
         {
             var query = "DELETE FROM CityEvent WHERE idEvent = @idEvent";
 
@@ -25,7 +25,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.Execute(query, parameters) == 1;
+                return await conn.ExecuteAsync(query, parameters) == 1;
             }
             catch (ArgumentException ex)
             {
@@ -37,7 +37,7 @@ namespace APIEventos.Infra.Data.Repository
             }
         }
 
-        public IEnumerable<CityEvent> GetByPriceDate(decimal minRange, decimal maxRange, DateTime dateHourEvent)
+        public async Task<IEnumerable<CityEvent>> GetByPriceDateAsync(decimal minRange, decimal maxRange, DateTime dateHourEvent)
         {
             var query = "SELECT * FROM CityEvent " +
                 "WHERE price BETWEEN @minRange AND @maxRange " +
@@ -51,7 +51,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.Query<CityEvent>(query, parameters);
+                return await conn.QueryAsync<CityEvent>(query, parameters);
             }
             catch (ArgumentException ex)
             {
@@ -63,7 +63,7 @@ namespace APIEventos.Infra.Data.Repository
             }
         }
 
-        public IEnumerable<CityEvent> GetByLocalDate(string local, DateTime dateHourEvent)
+        public async Task<IEnumerable<CityEvent>> GetByLocalDateAsync(string local, DateTime dateHourEvent)
         {
             var query = "SELECT * FROM CityEvent " +
                 "WHERE local LIKE @local " +
@@ -75,7 +75,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.Query<CityEvent>(query, parameters);
+                return await conn.QueryAsync<CityEvent>(query, parameters);
             }
             catch (ArgumentException ex)
             {
@@ -87,7 +87,7 @@ namespace APIEventos.Infra.Data.Repository
             }
         }
 
-        public IEnumerable<CityEvent> GetByTitle(string title)
+        public async Task<IEnumerable<CityEvent>> GetByTitleAsync(string title)
         {
             var query = "SELECT * FROM CityEvent " +
                 "WHERE title LIKE @title";
@@ -99,7 +99,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.Query<CityEvent>(query, parameters);
+                return await conn.QueryAsync<CityEvent>(query, parameters);
             }
             catch (ArgumentException ex)
             {
@@ -110,7 +110,7 @@ namespace APIEventos.Infra.Data.Repository
                 return new List<CityEvent>();
             }
         }
-        public CityEvent GetById(long idEvent)
+        public async Task<CityEvent> GetByIdAsync(long idEvent)
         {
             var query = "SELECT * FROM CityEvent " +
                 "WHERE idEvent = @idEvent";
@@ -120,7 +120,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.QueryFirstOrDefault<CityEvent>(query, parameters);
+                return await conn.QueryFirstOrDefaultAsync<CityEvent>(query, parameters);
             }
             catch (ArgumentException ex)
             {
@@ -132,7 +132,7 @@ namespace APIEventos.Infra.Data.Repository
             }
         }
 
-        public bool Insert(CityEvent eventObj)
+        public async Task<bool> InsertAsync(CityEvent eventObj)
         {
             var query = "INSERT INTO CityEvent " +
                 "VALUES (@title, @description, @dateHourEvent, @local, @address, @price, @status)";
@@ -149,7 +149,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.Execute(query, parameters) == 1;
+                return await conn.ExecuteAsync(query, parameters) == 1;
             }
             catch (ArgumentException ex)
             {
@@ -161,7 +161,7 @@ namespace APIEventos.Infra.Data.Repository
             }
         }
 
-        public bool Update(long idEvent, CityEvent eventObj)
+        public async Task<bool> UpdateAsync(long idEvent, CityEvent eventObj)
         {
             var query = "UPDATE CityEvent " +
                 "SET title = @title, " +
@@ -179,7 +179,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.Execute(query, parameters) == 1;
+                return await conn.ExecuteAsync(query, parameters) == 1;
             }
             catch (ArgumentException ex)
             {

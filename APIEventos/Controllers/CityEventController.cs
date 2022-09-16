@@ -6,8 +6,7 @@ namespace APIEventos.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Consumes("application/json")]
-    [Produces("application/json")]
+    
     public class CityEventController : ControllerBase
     {
         public ICityEventService _cityEventService;
@@ -18,62 +17,76 @@ namespace APIEventos.Controllers
         }
 
         [HttpGet("/search/CityEvent/title")]
-        //[HttpGet("/search/{title}")]
+        [Consumes("text/plain")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<List<CityEvent>> GetEventsByTitle(string title)
+        //filtro para título vazio
+        public async Task<ActionResult<List<CityEvent>>> GetEventsByTitleAsync(string title)
         {
-            return Ok(_cityEventService.GetByTitle(title));
+            return Ok(await _cityEventService.GetByTitleAsync(title));
         }
 
         [HttpGet("/search/CityEvent/localdate")]
-        //[HttpGet("/search/{local}&{dateHourEvent}")]
+        [Consumes("text/plain")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<List<CityEvent>> GetEventsByLocalDate(string local, DateTime dateHourEvent)
+        //filtro para local vazio
+        //filtro para data vazia
+        public async Task<ActionResult<List<CityEvent>>> GetEventsByLocalDateAsync(string local, DateTime dateHourEvent)
         {
-            return Ok(_cityEventService.GetByLocalDate(local, dateHourEvent));
+            return Ok(await _cityEventService.GetByLocalDateAsync(local, dateHourEvent));
         }
 
-        //[HttpGet("/search/{minRange}&{maxRange}&{dateHourEvent}")]
         [HttpGet("/search/CityEvent/pricedate")]
+        [Consumes("text/plain")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<List<CityEvent>> GetEventsByPriceDate(decimal minRange, decimal maxRange, DateTime dateHourEvent)
+        //filtro para minRange vazio
+        //filtro para maxRange vazio
+        //filtro para data vazia
+        public async Task<ActionResult<List<CityEvent>>> GetEventsByPriceDateAsync(decimal minRange, decimal maxRange, DateTime dateHourEvent)
         {
-            return Ok(_cityEventService.GetByPriceDate(minRange, maxRange, dateHourEvent));
+            return Ok(await _cityEventService.GetByPriceDateAsync(minRange, maxRange, dateHourEvent));
         }
 
         [HttpPost("/insert/CityEvent")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<CityEvent> Insert(CityEvent eventObj)
+        public async Task<ActionResult<CityEvent>> InsertAsyncc(CityEvent eventObj)
         {
-            if (_cityEventService.Insert(eventObj))
-                return CreatedAtAction(nameof(Insert), eventObj);
+            if (await _cityEventService.InsertAsync(eventObj))
+                return CreatedAtAction(nameof(InsertAsyncc), eventObj);
             else
                 return BadRequest();
         }
 
         [HttpPut("/update/CityEvent")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult<CityEvent> Update(long idEvent, CityEvent eventObj)
+        //filtro para idEvent vazio
+        public async Task<ActionResult<CityEvent>> UpdateAsync(long idEvent, CityEvent eventObj)
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
             eventObj.IdEvent = idEvent;
-            if (_cityEventService.Update(idEvent, eventObj))
+            if (await _cityEventService.UpdateAsync(idEvent, eventObj))
                 return Ok(eventObj);
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
 
         [HttpDelete("/delete/CityEvent")]
+        [Consumes("text/plain")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         //criar filtro para verificar se existe reserva neste evento
-        public IActionResult Delete(long idEvent)
+        public async Task<IActionResult> DeleteAsync(long idEvent)
         {
-            CityEvent cityEvent = _cityEventService.GetById(idEvent);
-            if (_cityEventService.Delete(idEvent))
+            CityEvent cityEvent = await _cityEventService.GetById(idEvent);
+            if (await _cityEventService.DeleteAsync(idEvent))
                 return Ok(cityEvent);
             return NotFound();
         }

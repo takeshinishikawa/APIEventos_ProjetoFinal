@@ -11,39 +11,39 @@ namespace APIEventos.Core.Services
             _cityEventRepository = cityEventRepository;
         }
 
-        public bool Delete(long idEvent)
+        public async Task<bool> DeleteAsync(long idEvent)
         {
-            return _cityEventRepository.Delete(idEvent);
+            return await _cityEventRepository.DeleteAsync(idEvent);
         }
 
-        public CityEvent GetById(long idEvent)
+        public async Task<CityEvent> GetById(long idEvent)
         {
-            return _cityEventRepository.GetById(idEvent);
+            return await _cityEventRepository.GetByIdAsync(idEvent);
         }
 
-        public IEnumerable<CityEvent> GetByLocalDate(string local, DateTime dateHourEvent)
+        public async Task<IEnumerable<CityEvent>> GetByLocalDateAsync(string local, DateTime dateHourEvent)
         {
-            return _cityEventRepository.GetByLocalDate(local, dateHourEvent);
+            return await _cityEventRepository.GetByLocalDateAsync(local, dateHourEvent);
         }
 
-        public IEnumerable<CityEvent> GetByPriceDate(decimal minRange, decimal maxRange, DateTime dateHourEvent)
+        public async Task<IEnumerable<CityEvent>> GetByPriceDateAsync(decimal minRange, decimal maxRange, DateTime dateHourEvent)
         {
-            return _cityEventRepository.GetByPriceDate(minRange, maxRange, dateHourEvent);
+            return await _cityEventRepository.GetByPriceDateAsync(minRange, maxRange, dateHourEvent);
         }
 
-        public IEnumerable<CityEvent> GetByTitle(string title)
+        public async Task<IEnumerable<CityEvent>> GetByTitleAsync(string title)
         {
-            return _cityEventRepository.GetByTitle(title);
+            return await _cityEventRepository.GetByTitleAsync(title);
         }
 
-        public bool Insert(CityEvent eventObj)
+        public async Task<bool> InsertAsync(CityEvent eventObj)
         {
-            return _cityEventRepository.Insert(eventObj);
+            return await _cityEventRepository.InsertAsync(eventObj);
         }
 
-        public bool Update(long idEvent, CityEvent eventObj)
+        public async Task<bool> UpdateAsync(long idEvent, CityEvent eventObj)
         {
-            return _cityEventRepository.Update(idEvent, eventObj);
+            return await _cityEventRepository.UpdateAsync(idEvent, eventObj);
         }
     }
 }

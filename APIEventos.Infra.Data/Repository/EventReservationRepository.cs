@@ -15,7 +15,7 @@ namespace APIEventos.Infra.Data.Repository
             _configuration = configuration;
         }
 
-        public bool Delete(long idReservation)
+        public async Task<bool> DeleteAsync(long idReservation)
         {
             var query = "DELETE FROM EventReservation WHERE idReservation = @idReservation";
 
@@ -25,7 +25,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.Execute(query, parameters) == 1;
+                return await conn.ExecuteAsync(query, parameters) == 1;
             }
             catch (ArgumentException ex)
             {
@@ -37,7 +37,7 @@ namespace APIEventos.Infra.Data.Repository
             }
         }
 
-        public EventReservation GetById(long idReservation)
+        public async Task<EventReservation> GetByIdAsync(long idReservation)
         {
             var query = "SELECT * FROM EventReservation " +
                 "WHERE idReservation = @idReservation ";
@@ -47,7 +47,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.QueryFirstOrDefault<EventReservation>(query, parameters);
+                return await conn.QueryFirstOrDefaultAsync<EventReservation>(query, parameters);
             }
             catch (ArgumentException ex)
             {
@@ -59,7 +59,7 @@ namespace APIEventos.Infra.Data.Repository
             }
         }
 
-        public EventReservation GetByPersonEvent(string personName, string title)
+        public async Task<EventReservation> GetByPersonEventAsync(string personName, string title)
         {
             var query = "SELECT EventReservation.IdReservation, EventReservation.IdEvent, EventReservation.PersonName " +
                 "FROM EventReservation " +
@@ -76,7 +76,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.QueryFirstOrDefault<EventReservation>(query, parameters);
+                return await conn.QueryFirstOrDefaultAsync<EventReservation>(query, parameters);
             }
             catch (ArgumentException ex)
             {
@@ -88,7 +88,7 @@ namespace APIEventos.Infra.Data.Repository
             }
         }
 
-        public bool Insert(EventReservation reservationObj)
+        public async Task<bool> InsertAsync(EventReservation reservationObj)
         {
             var query = "INSERT INTO EventReservation " +
                 "VALUES (@idEvent, @personName, @quantity)";
@@ -101,7 +101,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.Execute(query, parameters) == 1;
+                return await conn.ExecuteAsync(query, parameters) == 1;
             }
             catch (ArgumentException ex)
             {
@@ -113,7 +113,7 @@ namespace APIEventos.Infra.Data.Repository
             }
         }
 
-        public bool Update(long idReservation, long quantity)
+        public async Task<bool> UpdateAsync(long idReservation, long quantity)
         {
             var query = "UPDATE EventReservation " +
                 "SET quantity = @quantity " +
@@ -126,7 +126,7 @@ namespace APIEventos.Infra.Data.Repository
             try
             {
                 using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-                return conn.Execute(query, parameters) == 1;
+                return await conn.ExecuteAsync(query, parameters) == 1;
             }
             catch (ArgumentException ex)
             {
