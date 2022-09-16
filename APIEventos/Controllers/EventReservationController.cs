@@ -2,6 +2,7 @@
 using APIEventos.Core.Models;
 using APIEventos.Core.Services;
 using APIEventos.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +11,6 @@ namespace APIEventos.Controllers
     [ApiController]
     [Route("[controller]")]
     [EnableCors("PolicyCors")]
-
     public class EventReservationController : ControllerBase
     {
         public IEventReservationService _eventReservationService;
@@ -24,6 +24,7 @@ namespace APIEventos.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize]
         public async Task<ActionResult<EventReservation>> GetByPersonNameAsync(string personName, string title)
         {
             EventReservation reservation = await _eventReservationService.GetByPersonEventAsync(personName, title);
@@ -39,6 +40,7 @@ namespace APIEventos.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ServiceFilter(typeof(CityEventExistsActionFilter))]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<EventReservation>> InsertAsyncc(EventReservation reservationObj)
         {
             if (await _eventReservationService.InsertAsync(reservationObj))
@@ -54,6 +56,7 @@ namespace APIEventos.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ServiceFilter(typeof(CheckReservationQuantityActionFilter))]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateAsync(long idReservation, long quantity)
         {
             if (!ModelState.IsValid)
@@ -68,6 +71,7 @@ namespace APIEventos.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteAsync(long idReservation)
         {
             EventReservation eventReservation = await _eventReservationService.GetByIdAsync(idReservation);

@@ -1,6 +1,7 @@
 ﻿using APIEventos.Core.Interfaces;
 using APIEventos.Core.Models;
 using APIEventos.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace APIEventos.Controllers
     [ApiController]
     [Route("[controller]")]
     [EnableCors("PolicyCors")]
+    [Authorize(Roles = "admin")]
 
     public class CityEventController : ControllerBase
     {
@@ -26,6 +28,7 @@ namespace APIEventos.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ServiceFilter(typeof(CheckEmptyTitleActionFilter))]
+        [AllowAnonymous]
         public async Task<ActionResult<List<CityEvent>>> GetEventsByTitleAsync(string title)
         {
             return Ok(await _cityEventService.GetByTitleAsync(title));
@@ -37,6 +40,7 @@ namespace APIEventos.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ServiceFilter(typeof(CheckEmptyLocalActionFilter))]
         [ServiceFilter(typeof(CheckNullDateHourEventActionFilter))]
+        [AllowAnonymous]
         public async Task<ActionResult<List<CityEvent>>> GetEventsByLocalDateAsync(string local, DateTime dateHourEvent)
         {
             return Ok(await _cityEventService.GetByLocalDateAsync(local, dateHourEvent));
@@ -49,6 +53,7 @@ namespace APIEventos.Controllers
         [ServiceFilter(typeof(CheckMinRangeActionFilter))]
         [ServiceFilter(typeof(CheckMaxRangeActionFilter))]
         [ServiceFilter(typeof(CheckNullDateHourEventActionFilter))]
+        [AllowAnonymous]
         public async Task<ActionResult<List<CityEvent>>> GetEventsByPriceDateAsync(decimal minRange, decimal maxRange, DateTime dateHourEvent)
         {
             return Ok(await _cityEventService.GetByPriceDateAsync(minRange, maxRange, dateHourEvent));
