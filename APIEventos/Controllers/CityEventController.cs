@@ -23,7 +23,7 @@ namespace APIEventos.Controllers
         [Consumes("text/plain")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        //filtro para título vazio
+        [ServiceFilter(typeof(CheckEmptyTitleActionFilter))]
         public async Task<ActionResult<List<CityEvent>>> GetEventsByTitleAsync(string title)
         {
             return Ok(await _cityEventService.GetByTitleAsync(title));
@@ -33,8 +33,8 @@ namespace APIEventos.Controllers
         [Consumes("text/plain")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        //filtro para local vazio
-        //filtro para data vazia
+        [ServiceFilter(typeof(CheckEmptyLocalActionFilter))]
+        [ServiceFilter(typeof(CheckNullDateHourEventActionFilter))]
         public async Task<ActionResult<List<CityEvent>>> GetEventsByLocalDateAsync(string local, DateTime dateHourEvent)
         {
             return Ok(await _cityEventService.GetByLocalDateAsync(local, dateHourEvent));
@@ -44,9 +44,9 @@ namespace APIEventos.Controllers
         [Consumes("text/plain")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        //filtro para minRange vazio
-        //filtro para maxRange vazio
-        //filtro para data vazia
+        [ServiceFilter(typeof(CheckMinRangeActionFilter))]
+        [ServiceFilter(typeof(CheckMaxRangeActionFilter))]
+        [ServiceFilter(typeof(CheckNullDateHourEventActionFilter))]
         public async Task<ActionResult<List<CityEvent>>> GetEventsByPriceDateAsync(decimal minRange, decimal maxRange, DateTime dateHourEvent)
         {
             return Ok(await _cityEventService.GetByPriceDateAsync(minRange, maxRange, dateHourEvent));
@@ -57,6 +57,7 @@ namespace APIEventos.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ServiceFilter(typeof(CheckNullDateHourEventActionFilter))]
         public async Task<ActionResult<CityEvent>> InsertAsyncc(CityEvent eventObj)
         {
             if (await _cityEventService.InsertAsync(eventObj))
@@ -71,7 +72,7 @@ namespace APIEventos.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //filtro para idEvent vazio
+        [ServiceFilter(typeof(CheckNullDateHourEventActionFilter))]
         public async Task<ActionResult<CityEvent>> UpdateAsync(long idEvent, CityEvent eventObj)
         {
             eventObj.IdEvent = idEvent;

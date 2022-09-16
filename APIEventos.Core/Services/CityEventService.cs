@@ -15,7 +15,7 @@ namespace APIEventos.Core.Services
 
         public async Task<bool> DeleteAsync(long idEvent)
         {
-            if (((List<EventReservation>)_eventReservationService.GetByEventIdAsync(idEvent).Result).Count() > 0)
+            if (((List<EventReservation>)_eventReservationService.GetByEventIdAsync(idEvent).Result).Any() == true)
             {
                 CityEvent tempEvent = await _cityEventRepository.GetByIdAsync(idEvent);
                 tempEvent.Status = false;

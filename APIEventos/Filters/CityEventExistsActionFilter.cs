@@ -22,13 +22,16 @@ namespace APIEventos.Filters
 
             if (model == null)
             {
-                context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest); 
+                context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
+                return;
             }
             EventReservation reservation = (EventReservation)model;
             if (reservation == null)
             {
                 context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
+                return;
             }
+
             CityEvent cityEvent = _cityEventService.GetByIdAsync(reservation.IdEvent).Result;
             if (cityEvent == null)
             {

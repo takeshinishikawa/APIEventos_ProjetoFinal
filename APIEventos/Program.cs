@@ -23,6 +23,14 @@ builder.Services.AddScoped<IEventReservationService, EventReservationService>();
 //filters
 builder.Services.AddScoped<CheckReservationQuantityActionFilter>();
 builder.Services.AddScoped<CityEventExistsActionFilter>();
+builder.Services.AddScoped<CheckMinRangeActionFilter>();
+builder.Services.AddScoped<CheckMaxRangeActionFilter>();
+builder.Services.AddScoped<CheckNullDateHourEventActionFilter>();
+builder.Services.AddScoped<CheckEmptyLocalActionFilter>();
+builder.Services.AddScoped<CheckEmptyTitleActionFilter>();
+
+
+
 //builder.Services.AddScoped<CheckReservationExistanceActionFilter>();
 
 //tentativa
