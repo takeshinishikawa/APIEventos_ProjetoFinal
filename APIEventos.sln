@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIEventos", "APIEventos\APIEventos.csproj", "{8DE67C41-9B2B-4321-A411-ED8B8141FB0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIEventos", "APIEventos\APIEventos.csproj", "{8DE67C41-9B2B-4321-A411-ED8B8141FB0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIEventos.Core", "APIEventos.Core\APIEventos.Core.csproj", "{8344EE82-099A-4E0D-B773-C5616F0DFEA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIEventos.Core", "APIEventos.Core\APIEventos.Core.csproj", "{8344EE82-099A-4E0D-B773-C5616F0DFEA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIEventos.Infra.Data", "APIEventos.Infra.Data\APIEventos.Infra.Data.csproj", "{D3C93345-A2D0-4BAF-970E-05245D401594}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIEventos.Infra.Data", "APIEventos.Infra.Data\APIEventos.Infra.Data.csproj", "{D3C93345-A2D0-4BAF-970E-05245D401594}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F3122D2E-A5F8-4C02-A4E5-EE841A99DB59}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

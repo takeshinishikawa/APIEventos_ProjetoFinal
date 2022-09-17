@@ -5,13 +5,20 @@ namespace APIEventos.Filters
 {
     public class CheckNullDateHourEventActionFilter : ActionFilterAttribute
     {
+        public ILogger<CheckNullDateHourEventActionFilter> _logger;
+
+        public CheckNullDateHourEventActionFilter(ILogger<CheckNullDateHourEventActionFilter> logger)
+        {
+            _logger = logger;
+        }
+
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             context.ActionArguments.TryGetValue("dateHourEvent", out object temp);
 
             if (temp == null)
             {
-                Console.WriteLine($"O parâmetro de Data e Hora do evento deve ser informado. {DateTime.Now}");
+                _logger.LogWarning($"O parâmetro de Data e Hora do evento deve ser informado. {DateTime.Now}");
                 context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
                 return;
             }
@@ -21,7 +28,7 @@ namespace APIEventos.Filters
             DateTime.TryParse("31/12/9999 23:59:59", out DateTime endDate);
             if (dateHourEvent >= startDate && dateHourEvent < endDate)
                 return;
-            Console.WriteLine($"A data informada está fora do intervalo entre {startDate} e {endDate}. {DateTime.Now}");
+            _logger.LogWarning($"A data informada \"{dateHourEvent}\"está fora do intervalo entre {startDate} e {endDate}. {DateTime.Now}");
             context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
     }

@@ -22,7 +22,6 @@ namespace APIEventos.Filters
             {
                 Console.WriteLine($"O Title do evento deve ser informado. {DateTime.Now}");
                 context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
-                return;
             }
         }
     }

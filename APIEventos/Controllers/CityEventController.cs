@@ -41,7 +41,7 @@ namespace APIEventos.Controllers
         [ServiceFilter(typeof(CheckEmptyLocalActionFilter))]
         [ServiceFilter(typeof(CheckNullDateHourEventActionFilter))]
         [AllowAnonymous]
-        public async Task<ActionResult<List<CityEvent>>> GetEventsByLocalDateAsync(string local, DateTime dateHourEvent)
+        public async Task<ActionResult<List<CityEvent>>> GetEventsByLocalDateAsync(string? local, DateTime dateHourEvent)
         {
             return Ok(await _cityEventService.GetByLocalDateAsync(local, dateHourEvent));
         }
@@ -54,9 +54,9 @@ namespace APIEventos.Controllers
         [ServiceFilter(typeof(CheckMaxRangeActionFilter))]
         [ServiceFilter(typeof(CheckNullDateHourEventActionFilter))]
         [AllowAnonymous]
-        public async Task<ActionResult<List<CityEvent>>> GetEventsByPriceDateAsync(decimal minRange, decimal maxRange, DateTime dateHourEvent)
+        public async Task<ActionResult<List<CityEvent>>> GetEventsByPriceDateAsync(decimal? minRange, decimal? maxRange, DateTime dateHourEvent)
         {
-            return Ok(await _cityEventService.GetByPriceDateAsync(minRange, maxRange, dateHourEvent));
+            return Ok(await _cityEventService.GetByPriceDateAsync((decimal)minRange, (decimal)maxRange, dateHourEvent));
         }
 
         [HttpPost("/insert/CityEvent")]
@@ -64,13 +64,12 @@ namespace APIEventos.Controllers
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ServiceFilter(typeof(CheckNullDateHourEventActionFilter))]
+        [ServiceFilter(typeof(CheckNullDateHourObjEventActionFilter))]
         public async Task<ActionResult<CityEvent>> InsertAsyncc(CityEvent eventObj)
         {
             if (await _cityEventService.InsertAsync(eventObj))
                 return CreatedAtAction(nameof(InsertAsyncc), eventObj);
-            else
-                return BadRequest();
+            return BadRequest();
         }
 
         [HttpPut("/update/CityEvent")]
@@ -79,11 +78,11 @@ namespace APIEventos.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [ServiceFilter(typeof(CheckNullDateHourEventActionFilter))]
-        public async Task<ActionResult<CityEvent>> UpdateAsync(long idEvent, CityEvent eventObj)
+        [ServiceFilter(typeof(CheckNullDateHourObjEventActionFilter))]
+        public async Task<ActionResult<CityEvent>> UpdateAsync(long? idEvent, CityEvent eventObj)
         {
-            eventObj.IdEvent = idEvent;
-            if (await _cityEventService.UpdateAsync(idEvent, eventObj))
+            eventObj.IdEvent = (long)idEvent;
+            if (await _cityEventService.UpdateAsync((long)idEvent, eventObj))
                 return Ok(eventObj);
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
@@ -95,9 +94,9 @@ namespace APIEventos.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         //[ServiceFilter(typeof(CheckReservationExistanceActionFilter))]
         //criar filtro para verificar se existe reserva neste evento
-        public async Task<IActionResult> DeleteAsync(long idEvent)
+        public async Task<IActionResult> DeleteAsync(long? idEvent)
         {
-            if (await _cityEventService.DeleteAsync(idEvent))
+            if (await _cityEventService.DeleteAsync((long)idEvent))
                 return Ok();
             return NotFound();
         }

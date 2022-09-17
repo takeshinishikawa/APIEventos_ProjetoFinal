@@ -8,10 +8,12 @@ namespace APIEventos.Filters
 {
     public class CheckReservationExistanceActionFilter : ActionFilterAttribute
     {
-        IEventReservationService _eventReservationService;
-        public CheckReservationExistanceActionFilter(IEventReservationService eventReservationService)
+        private readonly IEventReservationService _eventReservationService;
+        public ILogger<CheckReservationExistanceActionFilter> _logger;
+        public CheckReservationExistanceActionFilter(IEventReservationService eventReservationService, ILogger<CheckReservationExistanceActionFilter> logger)
         {
             _eventReservationService = eventReservationService;
+            _logger = logger;
         }
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -19,6 +21,7 @@ namespace APIEventos.Filters
 
             if (id == null)
             {
+                _logger.LogWarning($"O usuário está conseguindo enviar valores nulos (valor enviado = {id}).  {DateTime.Now}");
                 context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
                 return;
             }
@@ -32,7 +35,7 @@ namespace APIEventos.Filters
             List<EventReservation> list = (List<EventReservation>)_eventReservationService.GetByEventIdAsync(eventId).Result;
             if (list != null)
             {
-                Console.WriteLine($"O evento de Id (\"{id}\") possui reservas e não pode ser deletado. {DateTime.Now}");
+                _logger.LogWarning($"O evento de Id (\"{id}\") possui reservas e não pode ser deletado. {DateTime.Now}");
                 context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
             }
         }

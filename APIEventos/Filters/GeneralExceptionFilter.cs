@@ -6,6 +6,12 @@ namespace APIEventos.Filters
 {
     public class GeneralExceptionFilter : ExceptionFilterAttribute
     {
+        public ILogger<GeneralExceptionFilter> _logger;
+        public GeneralExceptionFilter(ILogger<GeneralExceptionFilter> logger)
+        {
+            _logger = logger;
+        }
+
         public override void OnException(ExceptionContext context)
         {
             var problem = new ProblemDetails
@@ -15,7 +21,6 @@ namespace APIEventos.Filters
                 Detail = "Erro inesperado. Tente novamente.",
                 Type = context.Exception.GetType().Name
             };
-            Console.WriteLine($"Tipo da exceção {context.Exception.GetType().Name}, mensagem {context.Exception.Message}, stack trace {context.Exception.StackTrace}.");
             switch (context.Exception)
             {
                 case ArgumentNullException:
@@ -26,6 +31,7 @@ namespace APIEventos.Filters
                     {
                         StatusCode = StatusCodes.Status417ExpectationFailed
                     };
+                    _logger.LogCritical($"Tipo da exceção {context.Exception.GetType().Name}, mensagem {context.Exception.Message}, stack trace {context.Exception.StackTrace}.");
                     break;
                 case SqlException:
                     problem.Status = 503;
@@ -35,12 +41,14 @@ namespace APIEventos.Filters
                     {
                         StatusCode = StatusCodes.Status503ServiceUnavailable
                     };
+                    _logger.LogCritical($"Tipo da exceção {context.Exception.GetType().Name}, mensagem {context.Exception.Message}, stack trace {context.Exception.StackTrace}.");
                     break;
                 default:
                     context.Result = new ObjectResult(problem)
                     {
                         StatusCode = StatusCodes.Status500InternalServerError
                     };
+                    _logger.LogCritical($"Tipo da exceção {context.Exception.GetType().Name}, mensagem {context.Exception.Message}, stack trace {context.Exception.StackTrace}.");
                     break;
             }
         }

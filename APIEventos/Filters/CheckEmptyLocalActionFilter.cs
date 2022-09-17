@@ -5,13 +5,19 @@ namespace APIEventos.Filters
 {
     public class CheckEmptyLocalActionFilter : ActionFilterAttribute
     {
+        private ILogger<CheckEmptyLocalActionFilter> _logger;
+
+        public CheckEmptyLocalActionFilter(ILogger<CheckEmptyLocalActionFilter> logger)
+        {
+            _logger = logger;
+        }
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             context.ActionArguments.TryGetValue("local", out object temp);
 
             if (temp == null)
             {
-                Console.WriteLine($"O Local deve ser informado. {DateTime.Now}");
+                _logger.LogWarning($"O Local deve ser informado. {DateTime.Now}");
                 context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
                 return;
             }
@@ -20,9 +26,8 @@ namespace APIEventos.Filters
 
             if (local == String.Empty)
             {
-                Console.WriteLine($"O Local deve ser informado. {DateTime.Now}");
+                _logger.LogWarning($"O Local deve ser informado. {DateTime.Now}");
                 context.Result = new StatusCodeResult(StatusCodes.Status400BadRequest);
-                return;
             }
         }
     }
