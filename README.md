@@ -39,8 +39,8 @@ Em seguida insira dentro do Projeto de Web API: APIEventos um "App Settings File
   "AllowedHosts": "*",
   "key": "InsiraAquiUmTokenQueVoceDefinir",
   "Audience": "APIEvents.com",
-  "Issuer": "APIClientes.com"
-   "local": "https://localhost:7216"
+  "Issuer": "APIClientes.com",
+  "local": "https://localhost:7216"
 }
 ```
 ## EXECUÇÃO
